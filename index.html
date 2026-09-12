@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jane B. Basmayor — Construction Virtual Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #16233F;
+    --navy-deep: #0F1A30;
+    --line: #BFD9EE;
+    --line-dim: #7C9EC0;
+    --paper: #F6F3EA;
+    --paper-line: #D9CFB8;
+    --ink: #1C2430;
+    --ink-soft: #4B5563;
+    --orange: #DD5F27;
+    --orange-deep: #B9481A;
+    --concrete: #92A0AC;
+    --white: #FDFCF8;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Karla', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  h1,h2,h3,h4{
+    font-family: 'Oswald', sans-serif;
+    margin: 0;
+    letter-spacing: 0.01em;
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  a{ color: inherit; }
+  img,svg{ display:block; max-width:100%; }
+
+  :focus-visible{
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(246,243,234,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .topbar-inner{
+    max-width: 1080px; margin:0 auto; padding: 12px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brandmark{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:0.95rem;
+    color: var(--navy); text-decoration:none;
+  }
+  .brandmark .chip{
+    width:26px; height:26px; border-radius:50%;
+    border: 1.5px solid var(--navy);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 0.6rem; font-weight:700; letter-spacing:0.03em;
+  }
+  .topnav{ display:flex; gap: 22px; list-style:none; margin:0; padding:0; }
+  .topnav a{
+    font-family:'Oswald', sans-serif; font-size: 0.82rem;
+    text-decoration:none; color: var(--ink-soft);
+    padding-bottom: 3px; border-bottom: 1px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .topnav a:hover{ color: var(--orange); border-color: var(--orange); }
+  @media (max-width: 760px){ .topnav{ display:none; } }
+
+  /* ---------- SHEET LABEL / DIVIDER (drawing-set convention) ---------- */
+  .sheet-head{
+    display:flex; align-items:flex-end; gap: 16px;
+    margin: 0 0 34px 0;
+  }
+  .sheet-tag{
+    flex: 0 0 auto;
+    border: 1.5px solid var(--navy);
+    color: var(--navy);
+    font-family:'Oswald',sans-serif; font-size:0.72rem; font-weight:600;
+    padding: 4px 9px;
+    white-space:nowrap;
+  }
+  .sheet-line{ flex:1 1 auto; height:1px; background: var(--paper-line); position:relative; top: 1px;}
+  .sheet-title{ font-size: clamp(1.5rem, 3vw, 2.1rem); }
+
+  section{ padding: 84px 0; }
+  section.on-navy{ background: var(--navy); color: var(--white); }
+  section.on-navy .sheet-tag{ border-color: var(--line); color: var(--line); }
+  section.on-navy .sheet-line{ background: rgba(191,217,238,0.25); }
+  section.on-navy h2{ color: var(--white); }
+  section.on-navy .sub{ color: var(--line); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background: var(--navy);
+    color: var(--white);
+    padding: 96px 0 76px;
+    overflow:hidden;
+    background-image:
+      linear-gradient(rgba(191,217,238,0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(191,217,238,0.09) 1px, transparent 1px);
+    background-size: 34px 34px;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at 82% 20%, rgba(221,95,39,0.16), transparent 45%),
+                linear-gradient(180deg, transparent 60%, var(--navy) 100%);
+    pointer-events:none;
+  }
+  .hero-inner{
+    position:relative; z-index:2;
+    display:grid; grid-template-columns: 1.5fr 1fr; gap: 48px; align-items:center;
+  }
+  @media (max-width: 820px){ .hero-inner{ grid-template-columns: 1fr; } }
+
+  .hero-eyebrow{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Oswald', sans-serif; font-size:0.85rem;
+    color: var(--line); margin-bottom: 18px;
+    opacity:0; animation: rise .7s ease forwards; animation-delay:.05s;
+  }
+  .hero-eyebrow .dash{ width:28px; height:1px; background: var(--orange); }
+
+  .hero h1{
+    font-size: clamp(2.4rem, 5.4vw, 4rem);
+    color: var(--white);
+    line-height: 1.04;
+    opacity:0; animation: rise .7s ease forwards; animation-delay:.15s;
+  }
+  .hero h1 span{ display:block; }
+  .hero .credentials{
+    font-family:'Oswald', sans-serif; color: var(--orange);
+    font-size: clamp(1rem, 2vw, 1.25rem); margin-top:10px;
+    opacity:0; animation: rise .7s ease forwards; animation-delay:.25s;
+  }
+  .hero p.tagline{
+    max-width: 46ch; margin-top: 20px; color: #D8E3EE; font-size:1.05rem;
+    opacity:0; animation: rise .7s ease forwards; animation-delay:.35s;
+  }
+  .hero-contacts{
+    margin-top: 30px; display:flex; flex-wrap:wrap; gap: 10px 22px;
+    opacity:0; animation: rise .7s ease forwards; animation-delay:.45s;
+  }
+  .hero-contacts a{
+    text-decoration:none; color: var(--white); font-size:0.92rem;
+    border-bottom: 1px solid var(--line-dim); padding-bottom:2px;
+  }
+  .hero-contacts a:hover{ border-color: var(--orange); color: var(--orange); }
+
+  @keyframes rise{ from{ opacity:0; transform: translateY(14px);} to{ opacity:1; transform:none; } }
+
+  /* Profile photo (replaces engineer's seal) */
+  .seal-wrap{
+    display:flex; justify-content:center;
+    opacity:0; animation: rise .8s ease forwards; animation-delay:.3s;
+  }
+  .profile-frame{
+    width: 220px; height:220px; border-radius:50%;
+    border: 1.5px solid var(--line);
+    padding: 8px;
+    position:relative;
+  }
+  .profile-frame::before{
+    content:""; position:absolute; inset:8px; border-radius:50%;
+    border: 1px dashed rgba(191,217,238,0.4);
+  }
+  .profile-photo{
+    width:100%; height:100%; border-radius:50%; object-fit:cover; object-position: top center;
+    display:block;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1.3fr 1fr; gap: 54px; }
+  @media (max-width: 760px){ .about-grid{ grid-template-columns: 1fr; } }
+  .about-grid p{ color: var(--ink-soft); font-size:1.04rem; }
+  .skills-list{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+  .skills-list li{
+    font-size:0.92rem; color: var(--ink);
+    padding: 8px 0 8px 16px; border-left: 2px solid var(--orange);
+    background: linear-gradient(90deg, rgba(221,95,39,0.06), transparent 70%);
+  }
+
+  /* ---------- SERVICES ---------- */
+  .services-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--paper-line); border:1px solid var(--paper-line); }
+  @media (max-width: 900px){ .services-grid{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 540px){ .services-grid{ grid-template-columns: 1fr; } }
+  .service-card{ background: var(--paper); padding: 26px 22px; }
+  .service-card .icon{ width:38px; height:38px; margin-bottom:14px; }
+  .service-card h3{ font-size:1.02rem; margin-bottom:10px; }
+  .service-card ul{ margin:0; padding-left:18px; color: var(--ink-soft); font-size:0.9rem; }
+  .service-card li{ margin-bottom:5px; }
+
+  /* ---------- EXPERIENCE ---------- */
+  .exp-block{
+    display:grid; grid-template-columns: 220px 1fr; gap: 40px;
+  }
+  @media (max-width: 700px){ .exp-block{ grid-template-columns: 1fr; gap:18px; } }
+  .exp-meta .role{ font-family:'Oswald',sans-serif; font-size:1.2rem; color: var(--white); }
+  .exp-meta .org{ color: var(--orange); font-family:'Oswald',sans-serif; margin-top:4px; }
+  .exp-meta .dates{ color: var(--line); font-size:0.88rem; margin-top:6px; }
+  .exp-list{ list-style:none; margin:0; padding:0; }
+  .exp-list li{
+    position:relative; padding: 10px 0 10px 26px; color:#E2E9F1; font-size:0.98rem;
+    border-bottom: 1px solid rgba(191,217,238,0.14);
+  }
+  .exp-list li:last-child{ border-bottom:none; }
+  .exp-list li::before{
+    content:""; position:absolute; left:0; top:18px; width:10px; height:1.5px; background: var(--orange);
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .category-intro{
+    color: var(--ink-soft); font-size:1rem; max-width: 70ch; margin: -14px 0 28px 0;
+  }
+  .category-divider{
+    display:flex; align-items:center; gap:14px; margin: 56px 0 28px 0;
+  }
+  .category-divider h3{ font-size:1.3rem; white-space:nowrap; }
+  .category-divider .line{ flex:1; height:1px; background: var(--paper-line); }
+  .project{
+    border: 1px solid var(--paper-line);
+    margin-bottom: 26px;
+  }
+  .project-head{
+    display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;
+    padding: 18px 22px; border-bottom: 1px solid var(--paper-line); background: var(--white);
+  }
+  .project-head h3{ font-size:1.15rem; }
+  .project-head .ptype{ font-family:'Oswald',sans-serif; font-size:0.8rem; color: var(--orange); }
+  .project-body{ padding: 22px; display:grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  @media (max-width: 760px){ .project-body{ grid-template-columns: 1fr; } }
+  .project-body h4{ font-size:0.78rem; font-family:'Oswald',sans-serif; color: var(--concrete); margin-bottom:8px; }
+  .project-body p, .project-body li{ font-size:0.92rem; color: var(--ink-soft); }
+  .project-body ul{ margin:0; padding-left:18px; }
+  .project-gallery{
+    display:flex; flex-wrap:wrap; gap: 8px; align-items:flex-start;
+  }
+  .project-gallery img{
+    height:170px; width:auto; max-width:100%;
+    border:1px solid var(--paper-line);
+  }
+  @media (max-width: 600px){
+    .project-gallery img{ height:auto; width:100%; }
+  }
+
+  table{ width:100%; border-collapse: collapse; font-size:0.86rem; }
+  caption{ text-align:left; font-family:'Oswald',sans-serif; font-size:0.78rem; color: var(--concrete); margin-bottom:8px; }
+  th, td{ border: 1px solid var(--paper-line); padding: 7px 9px; text-align:left; }
+  th{ background: var(--navy); color: var(--white); font-family:'Oswald',sans-serif; font-weight:500; font-size:0.78rem; }
+  td.status-done{ color:#3E7A4A; font-weight:600; }
+  td.status-ongoing{ color: var(--orange-deep); font-weight:600; }
+
+  /* ---------- CERTS ---------- */
+  .cert-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .cert-card-wide{ grid-column: 1 / -1; justify-self:center; width:100%; max-width:380px; }
+  @media (max-width: 700px){ .cert-grid{ grid-template-columns: 1fr; } }
+  .cert-card{
+    border: 1.5px solid var(--navy); position:relative; background: var(--white); overflow:hidden;
+  }
+  .cert-card::before{
+    content:"CERTIFIED"; position:absolute; top:16px; right:16px; z-index:2;
+    font-family:'Oswald',sans-serif; font-size:0.62rem; letter-spacing:0.08em;
+    color: var(--orange); border:1px solid var(--orange); padding:3px 7px; transform: rotate(4deg);
+    background: rgba(253,252,248,0.9);
+  }
+  .cert-img-wrap{ width:100%; background: var(--paper); border-bottom: 1.5px solid var(--navy); overflow:hidden; }
+  .cert-img-wrap img{ width:100%; height:auto; display:block; }
+  .cert-img-placeholder{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    color: var(--concrete); font-family:'Oswald',sans-serif; font-size:0.75rem; letter-spacing:0.04em;
+    text-align:center; padding: 0 16px;
+  }
+  .cert-card-body{ padding: 24px; }
+  .cert-card h4{ font-size:1.05rem; margin-bottom:6px; max-width: 90%; }
+  .cert-card .sub{ color: var(--ink-soft); font-size:0.85rem; margin-bottom:14px; }
+  .cert-card .sample-line{ font-size:0.85rem; color: var(--navy); border-top:1px dashed var(--paper-line); padding-top:10px; }
+
+
+  /* ---------- SOFTWARE ---------- */
+  .soft-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:10px; }
+  .soft-pill{
+    border:1px solid var(--paper-line); background: var(--white);
+    padding: 12px 14px; font-size:0.88rem; text-align:center;
+  }
+
+  /* ---------- EDUCATION ---------- */
+  .edu-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  @media (max-width: 700px){ .edu-grid{ grid-template-columns: 1fr; } }
+  .edu-grid h4{ font-size:0.78rem; font-family:'Oswald',sans-serif; color: var(--orange); margin-bottom:10px; }
+  .cred-list{ list-style:none; margin:0; padding:0; }
+  .cred-list li{ padding: 8px 0; border-bottom: 1px solid var(--paper-line); font-size:0.95rem; }
+  .cred-list li:last-child{ border-bottom:none; }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  .contact-band{
+    background: var(--navy); color: var(--white); text-align:center; padding: 90px 0 70px;
+  }
+  .contact-band h2{ color: var(--white); font-size: clamp(1.8rem, 4vw, 2.6rem); max-width: 20ch; margin: 0 auto 18px; }
+  .contact-band p{ color: var(--line); max-width: 50ch; margin: 0 auto 28px; }
+  .cta-btn{
+    display:inline-block; background: var(--orange); color: var(--white); text-decoration:none;
+    font-family:'Oswald',sans-serif; font-size:0.95rem; padding: 14px 28px;
+    border: 1px solid var(--orange); transition: background .15s ease, color .15s ease;
+  }
+  .cta-btn:hover{ background:transparent; color: var(--orange); }
+  .social-row{
+    display:flex; justify-content:center; align-items:center; gap:18px; margin-top: 30px;
+  }
+  .social-row a{
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid var(--line-dim);
+    display:flex; align-items:center; justify-content:center;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .social-row a:hover{ border-color: var(--orange); background: rgba(221,95,39,0.12); }
+  .social-row svg{ width:19px; height:19px; }
+  footer{ padding: 26px 0; text-align:center; font-size:0.8rem; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="#top" class="brandmark"><span class="chip">JB</span> Jane B. Basmayor</a>
+    <ul class="topnav">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#certs">Certifications</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</div>
+
+<header class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="dash"></span> CONSTRUCTION VIRTUAL ASSISTANT — CEBU, PHILIPPINES</div>
+      <h1><span>Jane B.</span><span>Basmayor</span></h1>
+      <div class="credentials">RCE · RMP · CSP · SO2</div>
+      <p class="tagline">Licensed civil engineer bringing site-tested project administration, documentation, and estimating support to contractors and construction businesses working remotely.</p>
+      <div class="hero-contacts">
+        <a href="mailto:janebasmayorb@gmail.com">janebasmayorb@gmail.com</a>
+        <a href="#services">See services ↓</a>
+      </div>
+    </div>
+    <div class="seal-wrap">
+      <div class="profile-frame">
+        <img class="profile-photo" src="assets/images/profile-photo.jpg" alt="Jane B. Basmayor">
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="sheet-tag">01</span>
+      <div class="sheet-line"></div>
+      <h2 class="sheet-title">About</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>I'm a licensed civil engineer with hands-on experience in construction site operations, project documentation, material coordination, quantity takeoffs, and client and project support. I'm transitioning into remote construction virtual assistance, providing reliable administrative, documentation, estimating, and coordination support to contractors, engineers, and construction businesses.</p>
+        <p>My background on active job sites means I understand the documents, the terminology, and the pace of construction work — so the support I provide fits how your projects actually run.</p>
+      </div>
+      <ul class="skills-list">
+        <li>Construction Documentation</li>
+        <li>Project Coordination</li>
+        <li>Quantity Takeoff</li>
+        <li>Material &amp; Procurement Tracking</li>
+        <li>Progress Reporting</li>
+        <li>QA/QC Documentation</li>
+        <li>MS Excel / Google Sheets</li>
+        <li>AutoCAD</li>
+        <li>Bluebeam</li>
+        <li>PlanSwift</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="background: var(--white); padding-top:84px;">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="sheet-tag">02</span>
+      <div class="sheet-line"></div>
+      <h2 class="sheet-title">Services I can provide</h2>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="services-grid">
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 40 40"><path d="M5 34 L5 18 L20 8 L35 18 L35 34 Z" fill="none" stroke="#16233F" stroke-width="1.6"/><line x1="12" y1="34" x2="12" y2="22" stroke="#DD5F27" stroke-width="1.6"/><line x1="28" y1="34" x2="28" y2="22" stroke="#DD5F27" stroke-width="1.6"/></svg>
+        <h3>Construction Support</h3>
+        <ul>
+          <li>Quantity takeoff assistance</li>
+          <li>Material tracking</li>
+          <li>Procurement monitoring</li>
+          <li>Progress tracking</li>
+          <li>Punch list preparation</li>
+          <li>Site documentation</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 40 40"><rect x="7" y="6" width="26" height="30" fill="none" stroke="#16233F" stroke-width="1.6"/><line x1="12" y1="14" x2="28" y2="14" stroke="#16233F" stroke-width="1.2"/><line x1="12" y1="20" x2="28" y2="20" stroke="#16233F" stroke-width="1.2"/><line x1="12" y1="26" x2="22" y2="26" stroke="#DD5F27" stroke-width="1.6"/></svg>
+        <h3>Administrative Support</h3>
+        <ul>
+          <li>Excel / Google Sheets</li>
+          <li>Data entry</li>
+          <li>File organization</li>
+          <li>Reports</li>
+          <li>Document formatting</li>
+          <li>Meeting minutes</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="none" stroke="#16233F" stroke-width="1.6"/><path d="M20 6 A14 14 0 0 1 34 20" fill="none" stroke="#DD5F27" stroke-width="1.6"/><circle cx="20" cy="20" r="2.2" fill="#16233F"/></svg>
+        <h3>Project Coordination</h3>
+        <ul>
+          <li>Task tracking</li>
+          <li>Schedule monitoring</li>
+          <li>Supplier coordination</li>
+          <li>Client / project updates</li>
+          <li>RFI / submittal tracking</li>
+          <li>Document management</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 40 40"><path d="M6 34 L34 6" stroke="#16233F" stroke-width="1.6"/><path d="M6 34 L6 24 L16 34 Z" fill="none" stroke="#DD5F27" stroke-width="1.4"/><circle cx="30" cy="10" r="4" fill="none" stroke="#16233F" stroke-width="1.4"/></svg>
+        <h3>Estimating &amp; Takeoff</h3>
+        <ul>
+          <li>Basic quantity takeoffs</li>
+          <li>Estimate preparation</li>
+          <li>Plan review assistance</li>
+          <li>Bluebeam takeoff</li>
+          <li>PlanSwift takeoff</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="on-navy">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="sheet-tag">03</span>
+      <div class="sheet-line"></div>
+      <h2 class="sheet-title">Professional experience</h2>
+    </div>
+    <div class="exp-block">
+      <div class="exp-meta">
+        <div class="role">Project Site Engineer</div>
+        <div class="org">Abante Builders Inc.</div>
+        <div class="dates">February – August 2026</div>
+      </div>
+      <ul class="exp-list">
+        <li>Monitored construction activities and project progress</li>
+        <li>Prepared and maintained project documentation and reports</li>
+        <li>Performed quantity takeoffs and material estimates</li>
+        <li>Coordinated material requirements and procurement</li>
+        <li>Monitored manpower and site activities</li>
+        <li>Carried out QA/QC checks and project inspections</li>
+        <li>Coordinated project concerns with clients, subcontractors, and site personnel</li>
+        <li>Prepared updates and documentation across multiple active projects</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="background: var(--white);">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="sheet-tag">04</span>
+      <div class="sheet-line"></div>
+      <h2 class="sheet-title">Selected construction projects</h2>
+    </div>
+
+    <div class="category-divider">
+      <h3>Residential Construction</h3>
+      <div class="line"></div>
+    </div>
+    <p class="category-intro">Site supervision, documentation, coordination, and material monitoring through architectural finishing.</p>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Project 1 — 3-Storey Residential Building</h3>
+        <span class="ptype">Role: Project Site Engineer</span>
+      </div>
+      <div class="project-body">
+        <div>
+          <h4>Scope</h4>
+          <p>Site supervision, documentation, coordination, and material monitoring through architectural finishing.</p>
+          <h4 style="margin-top:16px;">Responsibilities</h4>
+          <ul>
+            <li>Daily site monitoring and progress logging</li>
+            <li>Material delivery and inventory checks</li>
+            <li>Coordination between client and subcontractors</li>
+          </ul>
+        </div>
+        <div class="project-gallery">
+          <img src="assets/images/project1-1.jpg" alt="Project 1 site photo">
+          <img src="assets/images/project1-2.jpg" alt="Project 1 site photo">
+          <img src="assets/images/project1-3.jpg" alt="Project 1 site photo">
+          <img src="assets/images/project1-4.jpg" alt="Project 1 site photo">
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Project 2 — 2-Storey Residential Building with Roofdeck</h3>
+        <span class="ptype">Role: Project Site Engineer</span>
+      </div>
+      <div class="project-body">
+        <div>
+          <h4>Scope</h4>
+          <p>Site supervision, documentation, coordination, and material monitoring through architectural finishing.</p>
+          <h4 style="margin-top:16px;">Responsibilities</h4>
+          <ul>
+            <li>Daily site monitoring and progress logging</li>
+            <li>Material delivery and inventory checks</li>
+            <li>Coordination between client and subcontractors</li>
+          </ul>
+        </div>
+        <div class="project-gallery">
+          <img src="assets/images/project2-1.jpg" alt="Project 2 site photo">
+          <img src="assets/images/project2-2.jpg" alt="Project 2 site photo">
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Project 3 — 4-Storey Residential Building</h3>
+        <span class="ptype">Role: Project Site Engineer</span>
+      </div>
+      <div class="project-body">
+        <div>
+          <h4>Scope</h4>
+          <p>Site supervision, documentation, coordination, and material monitoring through architectural finishing.</p>
+          <h4 style="margin-top:16px;">Responsibilities</h4>
+          <ul>
+            <li>Daily site monitoring and progress logging</li>
+            <li>Material delivery and inventory checks</li>
+            <li>Coordination between client and subcontractors</li>
+          </ul>
+        </div>
+        <div class="project-gallery">
+          <img src="assets/images/project3-1.jpg" alt="Project 3 site photo">
+          <img src="assets/images/project3-2.jpg" alt="Project 3 site photo">
+        </div>
+      </div>
+    </div>
+
+    <div class="category-divider">
+      <h3>Structural / I-Beam Works</h3>
+      <div class="line"></div>
+    </div>
+    <p class="category-intro">Structural steel and concrete works: footing excavation, I-beam columns and beams, base plates, reinforcement, formwork, scaffolding, and site inspection.</p>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Project 4 — 3-Storey Residential Building</h3>
+        <span class="ptype">Structural exposure</span>
+      </div>
+      <div class="project-body">
+        <div>
+          <h4>Scope</h4>
+          <p>Structural steel and concrete works: footing excavation, I-beam columns and beams, base plates, reinforcement, formwork, scaffolding, and site inspection.</p>
+          <h4 style="margin-top:16px;">Skills developed</h4>
+          <ul>
+            <li>Structural steel and rebar inspection</li>
+            <li>Reading and cross-checking structural drawings on site</li>
+            <li>Scaffolding and safety compliance checks</li>
+          </ul>
+        </div>
+        <div class="project-gallery">
+          <img src="assets/images/project4-1.jpg" alt="Project 4 site photo">
+          <img src="assets/images/project4-2.jpg" alt="Project 4 site photo">
+          <img src="assets/images/project4-3.jpg" alt="Project 4 site photo">
+          <img src="assets/images/project4-4.jpg" alt="Project 4 site photo">
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3>Project 5 — 2-Storey, 8-Unit Apartment Building with Fence</h3>
+        <span class="ptype">Structural exposure</span>
+      </div>
+      <div class="project-body">
+        <div>
+          <h4>Scope</h4>
+          <p>Structural steel and concrete works: footing excavation, I-beam columns and beams, base plates, reinforcement, formwork, scaffolding, and site inspection.</p>
+          <h4 style="margin-top:16px;">Skills developed</h4>
+          <ul>
+            <li>Structural steel and rebar inspection</li>
+            <li>Reading and cross-checking structural drawings on site</li>
+            <li>Scaffolding and safety compliance checks</li>
+          </ul>
+        </div>
+        <div class="project-gallery">
+          <img src="assets/images/project5-1.jpg" alt="Project 5 site photo">
+          <img src="assets/images/project5-2.jpg" alt="Project 5 site photo">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs" style="background: var(--white);">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="sheet-tag">05</span>
+      <div class="sheet-line"></div>
+      <h2 class="sheet-title">Training &amp; certifications</h2>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-img-wrap">
+          <img src="assets/images/cert-safety-officer-2.jpg" alt="Safety Officer 2 / COSH training certificate">
+        </div>
+        <div class="cert-card-body">
+          <h4>Safety Officer 2 Certification</h4>
+          <div class="sub">40-Hour Construction Occupational Safety &amp; Health (COSH) with Training of Trainers</div>
+          <div class="sample-line">SO2-certified, with working knowledge of site safety compliance and monitoring.</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-img-wrap">
+          <img src="assets/images/cert-structural-analysis.jpg" alt="Structural Analysis and Design Report Compilation training certificate">
+        </div>
+        <div class="cert-card-body">
+          <h4>Structural Analysis &amp; Design Report Compilation</h4>
+          <div class="sub">Structural Reports for Building Permit Compliance (NSCP / ACI Standards)</div>
+        </div>
+      </div>
+      <div class="cert-card cert-card-wide">
+        <div class="cert-img-wrap">
+          <img src="assets/images/cert-bluebeam-planswift.jpg" alt="Bluebeam and PlanSwift training certificate">
+        </div>
+        <div class="cert-card-body">
+          <h4>Bluebeam &amp; PlanSwift Training</h4>
+          <div class="sub">Digital Quantity Takeoff &amp; Estimation for AEC Professionals</div>
+          <div class="sample-line">20-hour live workshop covering both Bluebeam Revu PDF markup and PlanSwift digital takeoff, with hands-on software application.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOFTWARE -->
+<section>
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="sheet-tag">06</span>
+      <div class="sheet-line"></div>
+      <h2 class="sheet-title">Software &amp; technical skills</h2>
+    </div>
+    <div class="soft-grid">
+      <div class="soft-pill">AutoCAD</div>
+      <div class="soft-pill">Bluebeam Revu</div>
+      <div class="soft-pill">PlanSwift</div>
+      <div class="soft-pill">Quantity Takeoff</div>
+      <div class="soft-pill">Plan Interpretation</div>
+      <div class="soft-pill">Microsoft Excel</div>
+      <div class="soft-pill">Microsoft Word</div>
+      <div class="soft-pill">Google Sheets</div>
+      <div class="soft-pill">Google Drive</div>
+      <div class="soft-pill">Canva</div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="on-navy">
+  <div class="wrap">
+    <div class="sheet-head">
+      <span class="sheet-tag">07</span>
+      <div class="sheet-line"></div>
+      <h2 class="sheet-title">Education &amp; credentials</h2>
+    </div>
+    <div class="edu-grid">
+      <div>
+        <h4>EDUCATION</h4>
+        <p style="color:#E2E9F1; margin:0;">Bachelor of Science in Civil Engineering<br>Cebu Institute of Technology – University<br>2021 – 2025</p>
+      </div>
+      <div>
+        <h4>PROFESSIONAL CREDENTIALS</h4>
+        <ul class="cred-list" style="color:#E2E9F1; border-color: rgba(191,217,238,0.2);">
+          <li style="border-color: rgba(191,217,238,0.2);">Registered Civil Engineer (RCE)</li>
+          <li style="border-color: rgba(191,217,238,0.2);">Registered Master Plumber (RMP)</li>
+          <li style="border-color: rgba(191,217,238,0.2);">Civil Service Professional (CSP)</li>
+          <li style="border-color: rgba(191,217,238,0.2); border-bottom:none;">Safety Officer 2 (SO2)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-band">
+  <div class="wrap">
+    <h2>Need reliable support for your construction projects?</h2>
+    <p>I can assist with project documentation, estimating support, quantity takeoffs, material tracking, and day-to-day project administration.</p>
+    <a class="cta-btn" href="mailto:janebasmayorb@gmail.com">Email janebasmayorb@gmail.com</a>
+    <div class="social-row">
+      <a href="https://www.facebook.com/jane.basmayor.rce" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FDFCF8" stroke-width="1.6"><path d="M15 8.5h-2c-.8 0-1.5.7-1.5 1.5v2h3.3l-.5 3H11.5V22h-3v-7H6v-3h2.5V9.8C8.5 7.1 10.2 5.5 12.7 5.5H15v3Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://www.instagram.com/janeyyb_?stkn=N3VleDc5d3JzMHUz&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FDFCF8" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.9" fill="#FDFCF8" stroke="none"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Jane B. Basmayor, RCE, RMP, CSP, SO2 — Construction Virtual Assistant — Cebu, Philippines
+</footer>
+
+</body>
+</html>
